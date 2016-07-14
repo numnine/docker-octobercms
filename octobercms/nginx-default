@@ -1,0 +1,27 @@
+server {
+	root /webapp;
+	index index.html index.htm index.php;
+
+	# Make site accessible from http://localhost/
+	server_name localhost;
+	include hhvm.conf;
+
+	location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+    	fastcgi_read_timeout 600;
+    	client_max_body_size 100m;
+    }
+
+    rewrite ^themes/.*/(layouts|pages|partials)/.*.htm /index.php break;
+	rewrite ^bootstrap/.* /index.php break;
+	rewrite ^config/.* /index.php break;
+	rewrite ^vendor/.* /index.php break;
+	rewrite ^storage/cms/.* /index.php break;
+	rewrite ^storage/logs/.* /index.php break;
+	rewrite ^storage/framework/.* /index.php break;
+	rewrite ^storage/temp/protected/.* /index.php break;
+	rewrite ^storage/app/uploads/protected/.* /index.php break;
+}
